@@ -39,6 +39,9 @@
     <!-- Dropdown to select the model -->
     <select id="modelDropdown">
         <option value="" disabled selected>Select a model</option>
+        <!-- Placeholder for models -->
+        <option value="https://raw.githubusercontent.com/nicolas-wall/3D-viewer/main/models/Caja001.glb">Caja001.glb</option>
+        <option value="https://raw.githubusercontent.com/nicolas-wall/3D-viewer/main/models/Caja002.glb">Caja002.glb</option>
     </select>
 
     <!-- 3D viewer -->
@@ -51,32 +54,11 @@
     </model-viewer>
 
     <script>
-        // Fetch the list of files from the models folder in the GitHub repository
-        async function loadModelList() {
-            const response = await fetch('https://api.github.com/repos/nicolas-wall/3D-viewer/contents/models?ref=main');
-            const data = await response.json();
-            
-            if (Array.isArray(data)) {
-                const dropdown = document.getElementById('modelDropdown');
-                data.forEach(item => {
-                    if (item.type === 'file') {
-                        const option = document.createElement('option');
-                        option.value = item.download_url;
-                        option.textContent = item.name;
-                        dropdown.appendChild(option);
-                    }
-                });
-            }
-        }
-
         // Load the selected model into the viewer
         document.getElementById('modelDropdown').addEventListener('change', function() {
             const modelViewer = document.getElementById('modelViewer');
             modelViewer.src = this.value;
         });
-
-        // Call the function to load the list of models when the page is loaded
-        window.onload = loadModelList;
     </script>
 
 </body>
