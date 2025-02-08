@@ -40,34 +40,35 @@
     <button id="resetButton">Reset View</button>
 
     <script>
-        async function loadModels() {
-            try {
-                const response = await fetch("http://localhost:5000/models");
-                const models = await response.json();
-                console.log("Models received:", models); // Debugging output
+       async function loadModels() {
+    try {
+        // Fetch the list of models from the 'models' folder in your GitHub repository
+        const response = await fetch("https://raw.githubusercontent.com/nicolas-wall/3d-viewer/main/models/");
+        const models = await response.json();
+        console.log("Models received:", models); // Debugging output
 
-                const selector = document.getElementById("modelSelector");
-                selector.innerHTML = "";  // Clear old options
+        const selector = document.getElementById("modelSelector");
+        selector.innerHTML = "";  // Clear old options
 
-                if (models.length === 0) {
-                    selector.innerHTML = "<option>No models found</option>";
-                    return;
-                }
-
-                models.forEach(model => {
-                    const option = document.createElement("option");
-                    option.value = model;
-                    option.textContent = model;
-                    selector.appendChild(option);
-                });
-
-                // Load the first model by default
-                changeModel(models[0]);
-
-            } catch (error) {
-                console.error("Error loading models:", error);
-            }
+        if (models.length === 0) {
+            selector.innerHTML = "<option>No models found</option>";
+            return;
         }
+
+        models.forEach(model => {
+            const option = document.createElement("option");
+            option.value = model;
+            option.textContent = model;
+            selector.appendChild(option);
+        });
+
+        // Load the first model by default
+        changeModel(models[0]);
+
+    } catch (error) {
+        console.error("Error loading models:", error);
+    }
+}
 
         function changeModel(model) {
             const viewer = document.getElementById("viewer");
