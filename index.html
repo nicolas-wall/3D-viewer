@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Model Viewer</title>
 
-    <!-- Model Viewer CDN (no modules) -->
+    <!-- Load model-viewer directly from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.js"></script>
     
     <style>
@@ -45,60 +45,50 @@
     <script>
         const modelViewer = document.getElementById("modelViewer");
 
-        // Load models from GitHub repository
-        async function loadModels() {
-            try {
-                // GitHub API URL to list files in the 'models' folder
-                const response = await fetch('https://api.github.com/repos/nicolas-wall/3d-viewer/contents/models');
-                
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch models: ${response.statusText}`);
-                }
-
-                const models = await response.json(); // Parse the JSON response
-
-                // Filter the files to include only .glb files
-                const modelList = models.filter(file => file.name.endsWith('.glb')).map(file => file.name);
-
-                console.log("Models received:", modelList); // Debugging output
-
-                const selector = document.getElementById("modelSelector");
-                selector.innerHTML = "";  // Clear old options
-
-                if (modelList.length === 0) {
-                    selector.innerHTML = "<option>No models found</option>";
-                    return;
-                }
-
-                modelList.forEach(model => {
-                    const option = document.createElement("option");
-                    option.value = model;
-                    option.textContent = model;
-                    selector.appendChild(option);
-                });
-
-                // Load the first model by default
-                changeModel(modelList[0]);
-
-            } catch (error) {
-                console.error("Error loading models:", error);
-                const selector = document.getElementById("modelSelector");
-                selector.innerHTML = "<option>Error loading models</option>";
+        // Hardcode model URLs
+        const models = [
+            {
+                name: "Caja001.glb",
+                url: "https://raw.githubusercontent.com/nicolas-wall/3D-viewer/main/models/Caja001.glb"
+            },
+            {
+                name: "Caja002.glb",
+                url: "https://raw.githubusercontent.com/nicolas-wall/3D-viewer/main/models/Caja002.glb"
             }
+        ];
+
+        // Populate model selector with model names
+        function populateModelSelector() {
+            const selector = document.getElementById("modelSelector");
+            selector.innerHTML = "";  // Clear the selector
+            if (models.length === 0) {
+                selector.innerHTML = "<option>No models found</option>";
+                return;
+            }
+
+            models.forEach(model => {
+                const option = document.createElement("option");
+                option.value = model.url;
+                option.textContent = model.name;
+                selector.appendChild(option);
+            });
+
+            // Set default model
+            modelViewer.src = models[0].url;
         }
 
         // Change model when user selects a new one
-        function changeModel(modelName) {
-            modelViewer.src = `https://raw.githubusercontent.com/nicolas-wall/3D-viewer/main/models/${modelName}`;
+        function changeModel(modelUrl) {
+            modelViewer.src = modelUrl;
         }
 
-        // Reset the viewer to the default state
+        // Reset viewer to the default state
         function resetViewer() {
             modelViewer.reset();
         }
 
-        // Call loadModels to populate the model selection
-        loadModels();
+        // Initial setup to load the models
+        populateModelSelector();
 
         // Event listener for model selection change
         document.getElementById("modelSelector").addEventListener("change", (event) => {
