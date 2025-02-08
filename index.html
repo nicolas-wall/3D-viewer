@@ -21,7 +21,10 @@
         select, button {
             padding: 10px;
             font-size: 16px;
-            margin: 10px;
+            margin: 5px;
+        }
+        .controls {
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -43,28 +46,34 @@
         alt="3D model" 
         src="" 
         auto-rotate 
-        camera-controls>
+        camera-controls 
+        camera-orbit="0deg 75deg auto">
     </model-viewer>
 
     <!-- Camera View Buttons -->
-    <div>
-        <button onclick="setCameraView('0deg')">Front</button>
-        <button onclick="setCameraView('90deg')">Left</button>
-        <button onclick="setCameraView('180deg')">Back</button>
-        <button onclick="setCameraView('-90deg')">Right</button>
+    <div class="controls">
+        <button onclick="setCameraView(0)">Front</button>
+        <button onclick="setCameraView(90)">Left</button>
+        <button onclick="setCameraView(180)">Back</button>
+        <button onclick="setCameraView(-90)">Right</button>
     </div>
 
     <script>
+        let initialRotation = 0; // Store initial rotation angle
+
         // Load the selected model into the viewer
         document.getElementById('modelDropdown').addEventListener('change', function() {
             const modelViewer = document.getElementById('modelViewer');
             modelViewer.src = this.value;
+            initialRotation = 0; // Reset rotation when changing model
+            modelViewer.cameraOrbit = `0deg 75deg auto`;
         });
 
-        // Function to set the camera view
-        function setCameraView(angle) {
+        // Function to set the camera view, keeping initial position consistent
+        function setCameraView(relativeAngle) {
             const modelViewer = document.getElementById('modelViewer');
-            modelViewer.cameraOrbit = angle + " 75deg auto"; // Keep the angle dynamic
+            const newAngle = (initialRotation + relativeAngle) % 360;
+            modelViewer.cameraOrbit = `${newAngle}deg 75deg auto`;
         }
     </script>
 
