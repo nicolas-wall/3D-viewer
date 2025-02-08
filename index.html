@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Model Viewer</title>
 
-    <!-- Correct model-viewer import -->
-    <script src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js"></script>
+    <!-- Non-module version of model-viewer -->
+    <script src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.js"></script>
     
     <style>
         body {
@@ -55,13 +55,11 @@
                     throw new Error(`Failed to fetch models: ${response.statusText}`);
                 }
 
-                const responseText = await response.text(); // Get the raw response text
-                console.log(responseText); // Log the response for debugging
-
-                const models = JSON.parse(responseText); // Parse it after logging
+                const models = await response.json(); // Parse the JSON response
 
                 // Filter the files to include only .glb files
                 const modelList = models.filter(file => file.name.endsWith('.glb')).map(file => file.name);
+
                 console.log("Models received:", modelList); // Debugging output
 
                 const selector = document.getElementById("modelSelector");
