@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Model Viewer</title>
 
-    <!-- Use a different CDN source for model-viewer -->
     <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@2.0.0/dist/model-viewer.js"></script>
-    
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,15 +18,10 @@
             height: 500px;
             margin-top: 20px;
         }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin-top: 10px;
-        }
-        select {
+        select, button {
             padding: 10px;
             font-size: 16px;
-            margin-top: 20px;
+            margin: 10px;
         }
     </style>
 </head>
@@ -39,7 +33,6 @@
     <!-- Dropdown to select the model -->
     <select id="modelDropdown">
         <option value="" disabled selected>Select a model</option>
-        <!-- Placeholder for models -->
         <option value="https://raw.githubusercontent.com/nicolas-wall/3D-viewer/main/models/Caja001.glb">Caja001.glb</option>
         <option value="https://raw.githubusercontent.com/nicolas-wall/3D-viewer/main/models/Caja002.glb">Caja002.glb</option>
     </select>
@@ -53,12 +46,26 @@
         camera-controls>
     </model-viewer>
 
+    <!-- Camera View Buttons -->
+    <div>
+        <button onclick="setCameraView('0deg')">Front</button>
+        <button onclick="setCameraView('90deg')">Left</button>
+        <button onclick="setCameraView('180deg')">Back</button>
+        <button onclick="setCameraView('-90deg')">Right</button>
+    </div>
+
     <script>
         // Load the selected model into the viewer
         document.getElementById('modelDropdown').addEventListener('change', function() {
             const modelViewer = document.getElementById('modelViewer');
             modelViewer.src = this.value;
         });
+
+        // Function to set the camera view
+        function setCameraView(angle) {
+            const modelViewer = document.getElementById('modelViewer');
+            modelViewer.cameraOrbit = angle + " 75deg auto"; // Keep the angle dynamic
+        }
     </script>
 
 </body>
