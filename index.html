@@ -19,10 +19,6 @@
             height: 500px;
             margin-top: 20px;
         }
-        select {
-            padding: 10px;
-            font-size: 16px;
-        }
         button {
             padding: 10px 20px;
             font-size: 16px;
@@ -33,67 +29,18 @@
 <body>
 
     <h1>3D Model Viewer</h1>
-    <p>Select a 3D model to view:</p>
-    <select id="modelSelector">
-        <option>Loading models...</option>
-    </select>
-    <br><br>
+    <p>View the 3D model:</p>
     <button onclick="resetViewer()">Reset Viewer</button>
 
-    <model-viewer id="modelViewer" alt="3D model" auto-rotate camera-controls></model-viewer>
+    <model-viewer id="modelViewer" alt="3D model" src="https://raw.githubusercontent.com/nicolas-wall/3D-viewer/main/models/Caja001.glb" auto-rotate camera-controls></model-viewer>
 
     <script>
         const modelViewer = document.getElementById("modelViewer");
-
-        // Hardcode model URLs
-        const models = [
-            {
-                name: "Caja001.glb",
-                url: "https://raw.githubusercontent.com/nicolas-wall/3D-viewer/main/models/Caja001.glb"
-            },
-            {
-                name: "Caja002.glb",
-                url: "https://raw.githubusercontent.com/nicolas-wall/3D-viewer/main/models/Caja002.glb"
-            }
-        ];
-
-        // Populate model selector with model names
-        function populateModelSelector() {
-            const selector = document.getElementById("modelSelector");
-            selector.innerHTML = "";  // Clear the selector
-            if (models.length === 0) {
-                selector.innerHTML = "<option>No models found</option>";
-                return;
-            }
-
-            models.forEach(model => {
-                const option = document.createElement("option");
-                option.value = model.url;
-                option.textContent = model.name;
-                selector.appendChild(option);
-            });
-
-            // Set default model
-            modelViewer.src = models[0].url;
-        }
-
-        // Change model when user selects a new one
-        function changeModel(modelUrl) {
-            modelViewer.src = modelUrl;
-        }
 
         // Reset viewer to the default state
         function resetViewer() {
             modelViewer.reset();
         }
-
-        // Initial setup to load the models
-        populateModelSelector();
-
-        // Event listener for model selection change
-        document.getElementById("modelSelector").addEventListener("change", (event) => {
-            changeModel(event.target.value);
-        });
     </script>
 </body>
 </html>
