@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model Viewer</title>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        model-viewer {
+            width: 100%;
+            max-width: 600px;
+            height: 500px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>3D Model Viewer</h1>
+    
+    <label for="modelSelector">Choose a model:</label>
+    <select id="modelSelector"></select>
+
+    <model-viewer id="viewer" src="models/your-model.glb" alt="3D Model" auto-rotate camera-controls shadow-intensity="1">
+</model-viewer>
+
+    <!-- Reset Button -->
+    <button id="resetButton">Reset View</button>
+
+    <script>
+        async function loadModels() {
+            try {
+                const response = await fetch("http://localhost:5000/models");
+                const models = await response.json();
+                console.log("Models received:", models); // Debugging output
+
+                const selector = document.getElementById("modelSelector");
+                selector.innerHTML = "";  // Clear old options
+
+                if (models.length === 0) {
+                    selector.innerHTML = "<option>No models found</option>";
+                    return;
+                }
+
+                models.forEach(model => {
+                    const option = document.createElement("option");
+                    option.value = model;
+                    option.textContent = model;
+                    selector.appendChild(option);
+                });
+
+                // Load the first model by default
+                changeModel(models[0]);
+
+            } catch (error) {
+                console.error("Error loading models:", error);
+            }
+        }
+
+        function changeModel(model) {
+            const viewer = document.getElementById("viewer");
+            viewer.setAttribute("src", `http://localhost:5000/models/${model}`);
+        }
+
+        // Reset function to reset the camera to default view
+        function resetView() {
+            const viewer = document.getElementById("viewer");
+            viewer.cameraOrbit = '0deg 75deg 5m';  // Resetting to a default position (or adjust as needed)
+        }
+
+        // Event listener for the reset button
+        document.getElementById("resetButton").addEventListener("click", resetView);
+
+        // Change model when selected from dropdown
+        document.getElementById("modelSelector").addEventListener("change", function() {
+            changeModel(this.value);
+        });
+
+        loadModels();
+    </script>
+
+</body>
+</html>
