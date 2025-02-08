@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Model Viewer</title>
 
-    <!-- Directly include model-viewer from CDN -->
+    <!-- Correctly include model-viewer from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js"></script>
     
     <style>
@@ -96,7 +96,7 @@
 
         // Reset the viewer to the default state
         function resetViewer() {
-            // Use reset instead of jumpCameraToGoal
+            // Use reset() instead of jumpCameraToGoal() which wasn't working
             modelViewer.reset();
         }
 
