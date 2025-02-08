@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Model Viewer</title>
 
-    <!-- Correctly include model-viewer from CDN -->
+    <!-- Correct model-viewer import -->
     <script src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.0.0/dist/model-viewer.min.js"></script>
     
     <style>
@@ -91,12 +91,11 @@
 
         // Change model when user selects a new one
         function changeModel(modelName) {
-            modelViewer.src = `https://nicolas-wall.github.io/3D-viewer/models/${modelName}`;
+            modelViewer.src = `https://raw.githubusercontent.com/nicolas-wall/3D-viewer/main/models/${modelName}`;
         }
 
         // Reset the viewer to the default state
         function resetViewer() {
-            // Use reset() instead of jumpCameraToGoal() which wasn't working
             modelViewer.reset();
         }
 
