@@ -6,105 +6,74 @@
     <title>3D Model Viewer - Login</title>
     <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@2.0.0/dist/model-viewer.js"></script>
 
-    <link href="https://fonts.googleapis.com/css?family=Anek+Latin&display=swap" rel="stylesheet" />
     <style>
         body {
-            font-family: 'Anek Latin', sans-serif;
-            background-color: #1a1a1a;
+            font-family: Arial, sans-serif;
+            background-color: black;
             color: white;
             text-align: center;
             padding: 20px;
-            margin: 0;
         }
-
-        .v4_2 {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #333;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 350px;
+        #login-container, #viewer-container {
+            display: none;
         }
-
-        .v4_3 {
-            font-size: 24px;
-            font-weight: bold;
+        model-viewer {
+            width: 100%;
+            height: 500px;
+            margin-top: 20px;
         }
-
-        .v4_6 {
-            display: block;
-            margin-top: 10px;
-            font-size: 16px;
-        }
-
-        .v4_7, .v4_9 {
-            display: block;
-            margin-top: 10px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .v4_8, .v4_4 {
-            height: 1px;
-            background-color: #555;
-            margin-top: 10px;
-        }
-
-        .v4_10 {
-            margin-top: 15px;
-            padding: 10px 20px;
-            background-color: #555;
-            color: white;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .v4_10:hover {
-            background-color: #777;
-        }
-
-        input {
+        select, button, input {
             padding: 10px;
             font-size: 16px;
-            margin: 5px 0;
-            background-color: #444;
+            margin: 5px;
+            background-color: #333;
             color: white;
             border: 1px solid #666;
             border-radius: 5px;
         }
-
-        input[type="password"] {
-            margin-top: 10px;
+        button {
+            cursor: pointer;
         }
-
-        /* Mobile responsiveness */
-        @media (max-width: 600px) {
-            .v4_2 {
-                width: 90%;
-            }
+        button:hover {
+            background-color: #555;
         }
-
     </style>
 </head>
 <body>
 
     <!-- Login Section -->
-    <div class="v4_2">
-        <span class="v4_3">Bienvenido</span>
-        <div class="v4_4"></div>
-        <div class="v4_8"></div>
-        <span class="v4_6">Inicia sesión para ver tus modelos</span>
-        <span class="v4_7">USUARIO</span>
-        <input type="text" id="username" placeholder="Ingrese su nombre de usuario"><br>
-        <span class="v4_9">CONTRASEÑA</span>
-        <input type="password" id="password" placeholder="Ingrese su contraseña"><br>
-        <span class="v4_10" onclick="login()">ENTRAR</span>
+    <div id="login-container">
+        <h1>Login</h1>
+        <input type="text" id="username" placeholder="Username"><br>
+        <input type="password" id="password" placeholder="Password"><br>
+        <button onclick="login()">Login</button>
+        <p id="error-msg" style="color: red;"></p>
+    </div>
+
+    <!-- Viewer Section (Hidden until login) -->
+    <div id="viewer-container">
+        <h1>Hola, <span id="username-display"></span>, elegí tu modelo de la lista:</h1>
+
+        <!-- Dropdown to select the model -->
+        <select id="modelDropdown">
+            <option value="" disabled selected>Select a model</option>
+        </select>
+
+        <!-- 3D viewer with HDRI image and enhanced lighting -->
+        <model-viewer 
+            id="modelViewer" 
+            alt="3D model" 
+            src="" 
+            camera-controls
+            environment-image="hdri/background.hdr"
+            environment-intensity="0.7"
+            shadow-intensity="1.5"
+            camera-orbit="0deg 65deg 5.5m"
+            background-color="#1a1a1a"
+            shadow-softness="0.75">
+        </model-viewer>
+
+        <button onclick="logout()" style="position: absolute; top: 10px; right: 10px;">Logout</button>
     </div>
 
     <script>
@@ -117,17 +86,57 @@
             .then(data => users = data)
             .catch(error => console.error('Error loading users:', error));
 
+        // Show login form
+        document.getElementById('login-container').style.display = "block";
+
         function login() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
             if (users[username] && users[username] === password) {
                 currentUser = username;
-                window.location.href = 'viewer.html';  // Redirect to the viewer page
+                document.getElementById('login-container').style.display = "none";
+                document.getElementById('viewer-container').style.display = "block";
+                document.getElementById('username-display').textContent = username;
+                loadModelList(username);
             } else {
-                alert('Usuario o contraseña incorrectos.');
+                document.getElementById('error-msg').innerText = "Invalid username or password.";
             }
         }
+
+        function logout() {
+            currentUser = "";
+            document.getElementById('login-container').style.display = "block";
+            document.getElementById('viewer-container').style.display = "none";
+            document.getElementById('username').value = "";
+            document.getElementById('password').value = "";
+        }
+
+        function loadModelList(username) {
+            const dropdown = document.getElementById('modelDropdown');
+            dropdown.innerHTML = `<option value="" disabled selected>Select a model</option>`;
+
+            const folderURL = `https://api.github.com/repos/nicolas-wall/3D-viewer/contents/models/${username}`;
+            
+            fetch(folderURL)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(file => {
+                        if (file.name.endsWith('.glb')) {
+                            let option = document.createElement('option');
+                            option.value = file.download_url;
+                            option.textContent = file.name.replace('.glb', ''); // Remove the extension
+                            dropdown.appendChild(option);
+                        }
+                    });
+                })
+                .catch(error => console.error('Error loading models:', error));
+        }
+
+        document.getElementById('modelDropdown').addEventListener('change', function() {
+            const modelViewer = document.getElementById('modelViewer');
+            modelViewer.src = this.value;
+        });
     </script>
 
 </body>
