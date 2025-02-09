@@ -37,19 +37,16 @@
         button:hover {
             background-color: #555;
         }
-        #logout-btn {
+        #logout-text {
             position: absolute;
             top: 20px;
             right: 20px;
-            background-color: #333;
+            font-size: 18px;
             color: white;
-            border: 1px solid #666;
-            padding: 10px 20px;
-            font-size: 16px;
             cursor: pointer;
         }
-        #logout-btn:hover {
-            background-color: #555;
+        #logout-text:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -88,8 +85,8 @@
             shadow-softness="0.75">
         </model-viewer>
 
-        <!-- Logout Button moved to top-right -->
-        <button id="logout-btn" onclick="logout()">Logout</button>
+        <!-- Logout Text moved to top-right -->
+        <span id="logout-text" onclick="logout()">Logout</span>
     </div>
 
     <script>
@@ -113,7 +110,7 @@
                 currentUser = username;
                 document.getElementById('login-container').style.display = "none";
                 document.getElementById('viewer-container').style.display = "block";
-                document.getElementById('greeting').textContent = `Hola, ${username}, elegí tu modelo de la lista:`;
+                document.getElementById('greeting').textContent = `Hola ${username}, elegí tu modelo de la lista:`;
                 loadModelList(username);
             } else {
                 document.getElementById('error-msg').innerText = "Invalid username or password.";
