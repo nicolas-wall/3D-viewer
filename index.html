@@ -136,9 +136,11 @@
                 .then(data => {
                     data.forEach(file => {
                         if (file.name.endsWith('.glb')) {
+                            // Remove the extension and display only the name
+                            const modelName = file.name.replace('.glb', '');
                             let option = document.createElement('option');
                             option.value = file.download_url;
-                            option.textContent = file.name;
+                            option.textContent = modelName; // Display the name without extension
                             dropdown.appendChild(option);
                         }
                     });
