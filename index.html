@@ -37,6 +37,20 @@
         button:hover {
             background-color: #555;
         }
+        #logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            border: 1px solid #666;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #logout-btn:hover {
+            background-color: #555;
+        }
     </style>
 </head>
 <body>
@@ -52,8 +66,8 @@
 
     <!-- Viewer Section (Hidden until login) -->
     <div id="viewer-container">
-        <h1>3D Model Viewer</h1>
-        <p>Choose a 3D model:</p>
+        <!-- Greeting with username -->
+        <h1 id="greeting"></h1>
 
         <!-- Dropdown to select the model -->
         <select id="modelDropdown">
@@ -74,7 +88,8 @@
             shadow-softness="0.75">
         </model-viewer>
 
-        <button onclick="logout()">Logout</button>
+        <!-- Logout Button moved to top-right -->
+        <button id="logout-btn" onclick="logout()">Logout</button>
     </div>
 
     <script>
@@ -98,6 +113,7 @@
                 currentUser = username;
                 document.getElementById('login-container').style.display = "none";
                 document.getElementById('viewer-container').style.display = "block";
+                document.getElementById('greeting').textContent = `Hola, ${username}, elegí tu modelo de la lista:`;
                 loadModelList(username);
             } else {
                 document.getElementById('error-msg').innerText = "Invalid username or password.";
