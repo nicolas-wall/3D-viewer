@@ -24,6 +24,10 @@
             background-color: #333;
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 350px;
         }
 
         .v4_3 {
@@ -51,7 +55,6 @@
         }
 
         .v4_10 {
-            display: inline-block;
             margin-top: 15px;
             padding: 10px 20px;
             background-color: #555;
@@ -94,7 +97,6 @@
     <!-- Login Section -->
     <div class="v4_2">
         <span class="v4_3">Bienvenido</span>
-        <span class="v4_10" onclick="login()">ENTRAR</span>
         <div class="v4_4"></div>
         <div class="v4_8"></div>
         <span class="v4_6">Inicia sesión para ver tus modelos</span>
@@ -102,6 +104,7 @@
         <input type="text" id="username" placeholder="Ingrese su nombre de usuario"><br>
         <span class="v4_9">CONTRASEÑA</span>
         <input type="password" id="password" placeholder="Ingrese su contraseña"><br>
+        <span class="v4_10" onclick="login()">ENTRAR</span>
     </div>
 
     <script>
