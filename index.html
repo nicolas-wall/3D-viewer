@@ -62,12 +62,13 @@
 
     <script>
         let currentUser = "";
+        let users = {};
 
-        // Simulated user credentials (In a real app, use a backend)
-        const users = {
-            "user1": "password123",
-            "user2": "securepass"
-        };
+        // Load users from users.json
+        fetch('users.json')
+            .then(response => response.json())
+            .then(data => users = data)
+            .catch(error => console.error('Error loading users:', error));
 
         // Show login form
         document.getElementById('login-container').style.display = "block";
