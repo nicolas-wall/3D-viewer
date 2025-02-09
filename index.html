@@ -60,13 +60,14 @@
             <option value="" disabled selected>Select a model</option>
         </select>
 
-        <!-- 3D viewer -->
+        <!-- 3D viewer with HDRI image -->
         <model-viewer 
             id="modelViewer" 
             alt="3D model" 
             src="" 
             auto-rotate 
-            camera-controls>
+            camera-controls
+            environment-image="hdri/brown_photostudio_02_1k.hdr">
         </model-viewer>
 
         <button onclick="logout()">Logout</button>
@@ -132,7 +133,6 @@
             const modelViewer = document.getElementById('modelViewer');
             modelViewer.src = this.value;
         });
-
     </script>
 
 </body>
