@@ -4,15 +4,42 @@ body {
     color: white;
     text-align: center;
     padding: 20px;
+    display: flex; /* Use flexbox for layout */
+    min-height: 100vh; /* Ensure the body takes at least the full height of the viewport */
+    flex-direction: column; /* Stack content vertically */
 }
+
 #login-container, #viewer-container {
     display: none;
 }
+
+#viewer-container {
+    display: flex; /* Use flexbox for viewer layout */
+    flex: 1; /* Take up remaining space */
+}
+
+#sidebar {
+    width: 200px;
+    background-color: #222;
+    padding: 10px;
+    text-align: left;
+    position: sticky; /* Keep the sidebar fixed when scrolling */
+    top: 0;
+    height: 100vh; /* Full viewport height */
+    overflow-y: auto; /* Enable scrolling if the content overflows */
+}
+
+#viewerArea {
+    flex: 1; /* The viewer area takes up the remaining space */
+    padding: 20px;
+}
+
 model-viewer {
     width: 100%;
     height: 500px;
     margin-top: 20px;
 }
+
 select, button, input {
     padding: 10px;
     font-size: 16px;
@@ -22,12 +49,19 @@ select, button, input {
     border: 1px solid #666;
     border-radius: 5px;
 }
+
 button {
     cursor: pointer;
+    display: block; /* Ensure the button takes full width */
+    width: 100%; /* Take full width of the sidebar */
+    text-align: center; /* Center the text inside the button */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
+
 button:hover {
     background-color: #555;
 }
+
 #footer {
     position: fixed;
     bottom: 20px;
@@ -66,4 +100,44 @@ model-viewer > .progress-bar > .update-bar {
 
 model-viewer:not([src]) > .progress-bar {
   display: none;
+}
+
+/* Styles for project list and models */
+#projectList {
+    margin-top: 10px;
+}
+
+.project {
+    margin-bottom: 10px;
+}
+
+.project h2 {
+    font-size: 18px;
+    margin: 0;
+    padding: 5px;
+    background-color: #333;
+    cursor: pointer;
+    user-select: none; /* Prevent text selection when clicking */
+}
+
+.project ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none; /* Initially hide the model list */
+}
+
+.project.active ul {
+    display: block; /* Show the model list when the project is active */
+}
+
+.project li a {
+    display: block;
+    padding: 5px 10px;
+    color: #ddd;
+    text-decoration: none;
+}
+
+.project li a:hover {
+    background-color: #444;
 }
